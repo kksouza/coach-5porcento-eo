@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reflexões dos 5% — NOME — DATA</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #1a1a1a; --soft: #555; --faint: #999; --rule: #c9c5bd; --paper: #f4f2ec;
+    --fill: #2b4a6f; --familia: #b5563f; --pessoal: #b07433; --trabalho: #4f7d6d;
+  }
+  html { background: #2a2622; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--ink); display: flex; justify-content: center; padding: clamp(0.5rem, 2vw, 2rem); }
+  .sheet { background: var(--paper); width: 100%; max-width: 880px; padding: clamp(1.5rem, 4vw, 3rem); box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
+
+  h1 { font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 800; letter-spacing: -0.01em; margin-bottom: 0.2rem; }
+  h1 span { font-weight: 400; }
+
+  .scores { padding: 0.7rem 0 1.1rem; margin-bottom: 0.4rem; }
+  .scores-title { font-size: clamp(0.62rem, 1.2vw, 0.72rem); font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: 0.7rem; }
+  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem 1.3rem; }
+  .score-item { font-size: clamp(0.68rem, 1.4vw, 0.8rem); color: var(--soft); }
+  .score-item b { color: var(--ink); font-weight: 700; }
+  .score-item .v { color: var(--fill); font-weight: 700; border-bottom: 1.5px solid var(--rule); padding: 0 0.7rem; margin-left: 0.2rem; }
+  .score-item .why { display: block; color: var(--fill); font-size: .74rem; line-height: 1.5; border-bottom: 1px solid var(--rule); min-height: 1.15rem; margin-top: 0.45rem; padding-bottom: .4rem; }
+  .score-item .why::before { content: "por quê"; color: var(--faint); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.35rem; }
+
+  .grid { border: 1.5px solid var(--ink); border-radius: 14px; overflow: hidden; }
+  .grid-head, .row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.4fr 1.5fr; border-bottom: 1px solid var(--rule); }
+  .row:last-child { border-bottom: none; }
+  .grid-head > div { padding: 0.8rem 0.9rem; border-right: 1px solid var(--rule); }
+  .grid-head > div:first-child, .grid-head > div:last-child { border-right: none; }
+  .col-q { font-size: clamp(0.68rem, 1.4vw, 0.8rem); font-weight: 700; margin-bottom: 0.3rem; }
+  .col-hint { font-size: clamp(0.58rem, 1.1vw, 0.66rem); color: var(--faint); line-height: 1.35; }
+  .row > div { padding: 0.9rem; border-right: 1px solid var(--rule); }
+  .row > div:last-child { border-right: none; }
+
+  .rowlabel { display: flex; flex-direction: column; justify-content: space-between; }
+  .rowlabel .name { font-size: clamp(0.85rem, 2vw, 1.15rem); font-weight: 800; letter-spacing: 0.02em; }
+  .row.r-trabalho .name { color: var(--trabalho); }
+  .row.r-familia  .name { color: var(--familia); }
+  .row.r-pessoal  .name { color: var(--pessoal); }
+  .rowlabel .headline { font-size: clamp(0.58rem, 1.1vw, 0.68rem); color: var(--faint); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.8rem; }
+  .rowlabel .headline i { display: block; font-style: normal; color: var(--fill); font-size: clamp(0.7rem, 1.4vw, 0.82rem); font-weight: 700; text-transform: none; letter-spacing: 0; border-bottom: 1.5px solid var(--rule); min-height: 1.3rem; margin-top: 0.25rem; }
+  .rowlabel .prio { font-size: clamp(0.62rem, 1.2vw, 0.72rem); color: var(--soft); margin-top: 0.9rem; }
+  .rowlabel .prio b { color: var(--fill); border-bottom: 1.5px solid var(--rule); padding: 0 0.5rem; font-weight: 700; }
+
+  .ans { color: var(--fill); line-height: 1.5; min-height: 3rem; }
+  .feelings { font-size: clamp(0.72rem, 1.5vw, 0.88rem); font-weight: 600; }
+  .context, .signif { font-size: clamp(0.7rem, 1.4vw, 0.83rem); }
+
+  .footer { margin-top: 1.4rem; }
+  .footer .block + .block { margin-top: 1.8rem; }
+  .block-title { font-size: clamp(0.62rem, 1.2vw, 0.72rem); font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin: 0 0 0.9rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--rule); }
+  .field { margin-bottom: 1.1rem; }
+  .field .label { font-size: clamp(0.68rem, 1.4vw, 0.8rem); color: var(--soft); margin-bottom: 0.35rem; line-height: 1.4; }
+  .field .label b { color: var(--ink); }
+  .field .hint { font-size: clamp(0.58rem, 1.1vw, 0.68rem); color: var(--faint); font-style: italic; margin: -0.15rem 0 0.4rem; }
+  .field .answer { font-size: clamp(0.72rem, 1.5vw, 0.86rem); color: var(--fill); line-height: 1.5; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; min-height: 2rem; }
+
+  .brand { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 1.6rem; font-size: 0.6rem; color: var(--faint); }
+  .brand .eo { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.05em; color: var(--soft); }
+
+  @media (max-width: 720px) {
+    .score-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-head { display: none; }
+    .row { grid-template-columns: 1fr; }
+    .row > div { border-right: none; border-bottom: 1px dashed var(--rule); }
+    .row > div:last-child { border-bottom: none; }
+    .row > div::before { content: attr(data-col); display: block; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); margin-bottom: 0.4rem; }
+    .rowlabel::before { content: none; }
+  }
+  @media print {
+    html, body { background: #fff; padding: 0; }
+    .sheet { box-shadow: none; max-width: 100%; padding: 12mm; }
+    .row, .field { break-inside: avoid; }
+    @page { size: A4; margin: 8mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <!-- CABEÇALHO: trocar NOME e DATA -->
+  <h1>REFLEXÕES DOS 5%: <span>NOME · DATA</span></h1>
+
+  <!-- QUALIDADE DE VIDA: nota dentro de .v, por quê dentro de .why -->
+  <div class="scores">
+    <span class="scores-title">Qualidade de vida — nota de 0 a 10</span>
+    <div class="score-grid">
+      <div class="score-item"><b>Saúde física</b><span class="v">&nbsp;</span><span class="why"></span></div>
+      <div class="score-item"><b>Saúde mental</b><span class="v">&nbsp;</span><span class="why"></span></div>
+      <div class="score-item"><b>Finanças</b><span class="v">&nbsp;</span><span class="why"></span></div>
+      <div class="score-item"><b>Amigos / Comunidade</b><span class="v">&nbsp;</span><span class="why"></span></div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="grid-head">
+      <div></div>
+      <div>
+        <div class="col-q">Como estou me sentindo?</div>
+        <div class="col-hint">Sentimentos mais fortes do último mês. Palavras soltas (alegria, tristeza…). De 3 a 5 emoções por quadro. <b>E qual emoção você está evitando escrever aqui?</b></div>
+      </div>
+      <div>
+        <div class="col-q">O que causou esses sentimentos?</div>
+        <div class="col-hint">Uma ou duas frases, só o contexto. O fato, não a interpretação.</div>
+      </div>
+      <div>
+        <div class="col-q">Significância (5%)</div>
+        <div class="col-hint">Por que isso foi pessoalmente significativo? Aprofunde! O que eu descubro sobre mim mesmo? <b>O que isso repete da minha história?</b></div>
+      </div>
+    </div>
+
+    <!-- TRABALHO -->
+    <div class="row r-trabalho">
+      <div class="rowlabel">
+        <span class="name">TRABALHO</span>
+        <span class="headline">Manchete (3 a 5 palavras)<i></i></span>
+        <span class="prio">Prioridade: <b>&nbsp;</b></span>
+      </div>
+      <div class="ans feelings" data-col="Sentindo"></div>
+      <div class="ans context" data-col="O que causou"></div>
+      <div class="ans signif" data-col="Significância (5%)"></div>
+    </div>
+
+    <!-- FAMÍLIA -->
+    <div class="row r-familia">
+      <div class="rowlabel">
+        <span class="name">FAMÍLIA</span>
+        <span class="headline">Manchete (3 a 5 palavras)<i></i></span>
+        <span class="prio">Prioridade: <b>&nbsp;</b></span>
+      </div>
+      <div class="ans feelings" data-col="Sentindo"></div>
+      <div class="ans context" data-col="O que causou"></div>
+      <div class="ans signif" data-col="Significância (5%)"></div>
+    </div>
+
+    <!-- PESSOAL -->
+    <div class="row r-pessoal">
+      <div class="rowlabel">
+        <span class="name">PESSOAL</span>
+        <span class="headline">Manchete (3 a 5 palavras)<i></i></span>
+        <span class="prio">Prioridade: <b>&nbsp;</b></span>
+      </div>
+      <div class="ans feelings" data-col="Sentindo"></div>
+      <div class="ans context" data-col="O que causou"></div>
+      <div class="ans signif" data-col="Significância (5%)"></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+
+    <!-- PERGUNTAS DIFÍCEIS -->
+    <div class="block">
+      <div class="block-title">As perguntas difíceis</div>
+      <div class="field">
+        <div class="label"><b>1.</b> Qual é a decisão mais importante que devo tomar AGORA ou em breve?</div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label"><b>2.</b> O que tenho evitado compartilhar no Fórum até agora?</div>
+        <div class="hint">Se a resposta for "nada", pergunte de novo.</div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label"><b>3.</b> Que conversas cruciais estou evitando?</div>
+        <div class="hint">Com quem — e o que aconteceria se eu tivesse essa conversa esta semana?</div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label"><b>4.</b> O que estou fingindo não saber?</div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label"><b>5.</b> Onde estou gastando energia — e onde ela deveria estar?</div>
+        <div class="answer"></div>
+      </div>
+    </div>
+
+    <!-- PARA O FÓRUM -->
+    <div class="block">
+      <div class="block-title">Para o Fórum</div>
+      <div class="field">
+        <div class="label">Uma conquista que quero celebrar com o grupo:</div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label">Como será o futuro nos próximos <b>30 a 60 dias?</b></div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label">Temas importantes, não resolvidos ou emocionalmente complexos para o meu <b>"Deep Dive Parking Lot"</b> (temas com um "porquê"):</div>
+        <div class="answer"></div>
+      </div>
+      <div class="field">
+        <div class="label">Temas que eu gostaria de explorar para aprender ou tomar melhores decisões (temas de <b>"o quê"</b> e <b>"como"</b>):</div>
+        <div class="answer"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="brand">
+    <span>Worksheets | Forum Training<br>©2024 Entrepreneurs' Organization</span>
+    <span class="eo">EO</span>
+  </div>
+
+</div>
+
+</body>
+</html>
